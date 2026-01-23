@@ -1,6 +1,6 @@
 local Game = {}
 
-function Game:initialize()
+function Game:load()
     Game.logger = require("src.logger")
     Game.debug = require("src.debug")
 
@@ -10,20 +10,18 @@ function Game:initialize()
     Game.utils = require("src.utils.init")
     Game.ui = require("src.ui.init")
 
-    Game.scenes:initialize()
-    Game.constants:initialize()
-    Game.systems:initialize()
-    Game.utils:initialize()
-    Game.ui:initialize()
-
+    Game.scenes:load()
+    Game.constants:load()
+    Game.systems:load()
+    Game.utils:load()
+    Game.ui:load()
     Game.debug:load()
 
     Game.logger.info("Game Started!")
 end 
 
-function Game.load()
-    -- Initialize game systems, scenes and stuff here
-    Game:initialize()
+function Game.loveload() -- Load game systems, scenes and stuff here
+    Game:load()
 end
 
 function Game.update(dt)

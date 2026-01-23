@@ -2,8 +2,8 @@ local Logger = require("src.logger")
 
 local Utils = {}
 
-function Utils:initialize() 
-    Logger.info("Initializing Utils...")
+function Utils:load()
+    Logger.info("Loading Utils...")
 end
 
 return Utils

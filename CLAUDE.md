@@ -38,7 +38,7 @@ Game.utils      -- helper functions
 ### Key Files
 
 - `main.lua` - Minimal entry point, delegates to `src/init.lua`
-- `src/init.lua` - Master loader with `load()`, `update(dt)`, `draw()`, `keypressed(key)`
+- `src/init.lua` - Master loader with `loveload()`, `update(dt)`, `draw()`, `keypressed(key)`
 - `src/logger.lua` - 4-level logging (DEBUG, INFO, WARNING, ERROR) with ANSI colors
 - `src/debug.lua` - Debug overlay (FPS, toggle with F1), only active with `--debug` flag
 - `conf.lua` - LÖVE configuration (1280x720 window)
@@ -51,7 +51,7 @@ When running with `--debug`, `libs/lurker/lurker.lua` enables live code reloadin
 ### Logger Usage
 
 ```lua
--- Via Game namespace (after Game:initialize())
+-- Via Game namespace (after Game:load())
 Game.logger.debug("message", "source")   -- only with --debug
 Game.logger.info("message", "source")
 Game.logger.warning("message", "source")

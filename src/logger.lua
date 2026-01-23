@@ -15,19 +15,12 @@ local COLORS = {
     RESET = "\27[0m"
 }
 
-local function checkDebugMode()
-    if arg then
-        for i, v in ipairs(arg) do
-            if v == "--debug" then
-                return true
-            end
-        end
-    end
-    return false
-end
-
 -- Checks the debug mode at startup
-Logger.currentLevel = checkDebugMode() and Logger.LEVELS.DEBUG or Logger.LEVELS.INFO
+local isDebugMode = false
+if arg and arg[2] == "--debug" then
+    isDebugMode = true
+end
+Logger.currentLevel = isDebugMode and Logger.LEVELS.DEBUG or Logger.LEVELS.INFO
 
 local function getTimestamp()
     return os.date("%H:%M:%S")

@@ -1,8 +1,3 @@
-if arg and arg[2] == "--debug" then
-    local lick = require("libs.lick.lick")
-    lick.debug = true
-end
-
 local Game = require("src.init")
 
 function love.load()
@@ -10,6 +5,10 @@ function love.load()
 end
 
 function love.update(dt)
+    if arg and arg[2] == "--debug" then
+        require("libs.lurker.lurker").update()
+    end
+
     Game.update(dt)
 end
 

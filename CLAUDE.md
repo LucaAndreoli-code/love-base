@@ -12,7 +12,7 @@ Love2D game template using a modular "init aggregator" pattern for clean namespa
 # Run the game (INFO level logging)
 love .
 
-# Run with debug mode (DEBUG logging + hot reload via lick.lua + VS Code debugger)
+# Run with debug mode (DEBUG logging + hot reload via lurker.lua + VS Code debugger)
 love . --debug
 ```
 
@@ -44,7 +44,7 @@ Game.utils      -- helper functions
 
 ### Hot Reload (Debug Mode)
 
-When running with `--debug`, `libs/lick/lick.lua` enables live code reloading. Errors display on screen. The entry point `main.lua` is reloaded when any `.lua` file changes.
+When running with `--debug`, `libs/lurker/lurker.lua` enables live code reloading. Errors display on screen. The entry point `main.lua` is reloaded when any `.lua` file changes.
 
 ### Logger Usage
 

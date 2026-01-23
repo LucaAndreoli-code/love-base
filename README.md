@@ -25,6 +25,7 @@ love-base/
 │   │   └── init.lua   # Utils aggregator
 │   └── init.lua       # Master loader (loads all modules)
 │   └── logger.lua     # 4-level logger
+│   └── debug.lua      # debug (working only when --debug active)
 ├── conf.lua           # Love2D configuration (window, modules, identity)
 └── main.lua           # Minimal entry point
 └── build.lua          # Configuration file for love-build (https://github.com/ellraiser/love-build)

@@ -1,5 +1,6 @@
 if arg and arg[2] == "--debug" then
-    require("libs.lick.lick")
+    local lick = require("libs.lick.lick")
+    lick.debug = true
 end
 
 local Game = require("src.init")

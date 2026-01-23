@@ -26,6 +26,8 @@ Each module directory has an `init.lua` that aggregates and exposes submodules. 
 
 ```lua
 local Game = require("src.init")
+Game.logger     -- 4-level logging system
+Game.debug      -- debug overlay (FPS, toggle with F1)
 Game.constants  -- centralized config values
 Game.scenes     -- game scenes
 Game.systems    -- core systems (state machine, input, assets)
@@ -49,11 +51,15 @@ When running with `--debug`, `libs/lurker/lurker.lua` enables live code reloadin
 ### Logger Usage
 
 ```lua
+-- Via Game namespace (after Game:initialize())
+Game.logger.debug("message", "source")   -- only with --debug
+Game.logger.info("message", "source")
+Game.logger.warning("message", "source")
+Game.logger.error("message", "source")
+
+-- Direct require (for modules that load before Game)
 local Logger = require("src.logger")
-Logger.debug("message", "source")   -- only with --debug
 Logger.info("message", "source")
-Logger.warning("message", "source")
-Logger.error("message", "source")
 ```
 
 ### Scene Interface

@@ -2,6 +2,8 @@ local Logger = require("src.logger")
 
 local Constants = {}
 
-Logger.info("Initializing constants...")
+function Constants:initialize() 
+    Logger.info("Initializing constants...")
+end
 
 return Constants

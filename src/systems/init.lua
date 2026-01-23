@@ -1,7 +1,9 @@
 local Logger = require("src.logger")
 
-local System = {}
+local Systems = {}
 
-Logger.info("Initializing systems...")
+function Systems:initialize()
+    Logger.info("Initializing systems...")
+end
 
-return System
+return Systems

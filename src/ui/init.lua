@@ -2,6 +2,8 @@ local Logger = require("src.logger")
 
 local UI = {}
 
-Logger.info("Initializing UI...")
+function UI:initialize() 
+    Logger.info("Initializing UI...")
+end
 
 return UI

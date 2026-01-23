@@ -9,6 +9,7 @@ love-base/
 ├── assets/
 │   ├── data/          # Data files (JSON, Lua tables, presets)
 │   ├── font/          # Custom fonts
+│   ├── icon/          # Game Icon (icon.png)
 │   ├── sounds/        # Sound effects and music
 │   └── sprites/       # Sprite sheets and images
 ├── shaders/           # GLSL shaders
@@ -29,6 +30,7 @@ love-base/
 ├── conf.lua           # Love2D configuration (window, modules, identity)
 └── main.lua           # Minimal entry point
 └── build.lua          # Configuration file for love-build (https://github.com/ellraiser/love-build)
+```
 
 ## Architecture
 
@@ -61,26 +63,54 @@ return Systems
 ```lua
 local Game = {}
 
-Game.constants = require("src.constants.init")
-Game.scenes = require("src.scenes.init")
-Game.systems = require("src.systems.init")
-Game.ui = require("src.ui.init")
-Game.utils = require("src.utils.init")
+function Game:initialize()
+    Game.logger = require("src.logger")
+    Game.debug = require("src.debug")
+    Game.constants = require("src.constants.init")
+    Game.scenes = require("src.scenes.init")
+    Game.systems = require("src.systems.init")
+    Game.ui = require("src.ui.init")
+    Game.utils = require("src.utils.init")
+
+    -- Initialize all modules
+    Game.scenes:initialize()
+    Game.constants:initialize()
+    -- ...
+
+    Game.debug:load()
+    Game.logger.info("Game Started!")
+end
+
+function Game.load() Game:initialize() end
+function Game.update(dt) ... end
+function Game.draw() Game.debug:draw() end
+function Game.keypressed(key) Game.debug:keypressed(key) end
 
 return Game
 ```
 
-**Usage:**
+**Usage: (main.lua)**
 ```lua
-local Logger = require("src.logger")
+local Game = require("src.init")
 
 function love.load()
-    Game = require("src.init")  -- Load everything at once
-    Game.systems:initialize()
-    
-    -- Clean and hierarchical access
-    Logger.info("Game started", "main")
-    Game.systems.stateMachine:change("menu")
+    Game.load()
+end
+
+function love.update(dt)
+    if arg and arg[2] == "--debug" then
+        require("libs.lurker.lurker").update()
+    end
+
+    Game.update(dt)
+end
+
+function love.draw()
+    Game.draw()
+end
+
+function love.keypressed(key)
+    Game.keypressed(key)
 end
 ```
 
@@ -108,25 +138,30 @@ love.graphics.setColor(Game.constants.colors.primary)
 #### `systems/`
 Fundamental architectural systems reusable across projects:
 
-**`state_machine.lua`** - Scene/state management
+**`state_machine.lua`** - Scene/state management (#TODO)
 - Registers scenes by name
 - Manages transitions between scenes
 - Calls `enter()`/`exit()` when changing scene
 - Routes `update()`/`draw()` to active scene
 
-**`input_handler.lua`** - Centralized input
+**`input_handler.lua`** - Centralized input (#TODO)
 - Handles keyboard/mouse/gamepad
 - Allows key rebinding
 - Separates input from game logic
 
-**`asset_manager.lua`** - Resource loading
+**`asset_manager.lua`** - Resource loading (#TODO)
 - Cache for images/fonts/sounds
 - Lazy loading or preload
 - Avoids duplicates in memory
 
-#### `logger.lua` (directly in `src/`)
-Logging system used everywhere. Located in `src/logger.lua` instead of `systems/` for shorter and direct access:
+#### `logger.lua` and `debug.lua` (directly in `src/`)
+Logging and debug systems are part of the Game namespace. After initialization, they are accessible via:
 ```lua
+-- Via Game namespace (recommended after Game:initialize())
+Game.logger.info("Message", "source")
+Game.debug:toggle()
+
+-- Direct require (for modules that load before Game)
 local Logger = require("src.logger")
 Logger.info("Message", "source")
 ```
@@ -277,18 +312,11 @@ love . --debug      # currentLevel = DEBUG (if launched via VSCODE)
 
 Logger implementation:
 ```lua
-local function checkDebugMode()
-    if arg then
-        for i, v in ipairs(arg) do
-            if v == "--debug" then
-                return true
-            end
-        end
-    end
-    return false
+local isDebugMode = false
+if arg and arg[2] == "--debug" then
+    isDebugMode = true
 end
-
-Logger.currentLevel = checkDebugMode() and Logger.LEVELS.DEBUG or Logger.LEVELS.INFO
+Logger.currentLevel = isDebugMode and Logger.LEVELS.DEBUG or Logger.LEVELS.INFO
 ```
 
 ### When to Add Modules
@@ -301,16 +329,16 @@ Logger.currentLevel = checkDebugMode() and Logger.LEVELS.DEBUG or Logger.LEVELS.
 - `ui/` - For reusable components
 
 **Add when needed:**
-- `entities/` - When you have 3+ types of game objects with similar logic
+- `entities/` - When you have types of game objects with similar logic
   - Player, Enemy, Bullet, Powerup, etc.
   - Useful for factory pattern and object pooling
 - Submodules in `systems/` as needed
-  - State machine when you have 2+ scenes
+  - State machine when you have multiple scenes
   - Asset manager when you have many resources
   - Input handler for key rebinding
 
 **Practical rule:**
-If you copy/paste the same type of code 3 times → extract into a dedicated module.
+If you copy/paste the same type of code → extract into a dedicated module.
 
 ## Run
 
@@ -320,6 +348,21 @@ love .
 
 # With debug logging (also shows DEBUG - ONLY VIA VSCODE with Lua Local Debugger)
 love . --debug
+```
+
+## VS Code Settings
+
+`.vscode/settings.json` configuration:
+```json
+{
+  "Lua.runtime.version": "LuaJIT",
+  "Lua.workspace.library": [
+    "${3rd}/love2d/library"
+  ],
+  "Lua.diagnostics.globals": [
+    "love"
+  ]
+}
 ```
 
 ## VS Code Debug
@@ -352,4 +395,5 @@ love . --debug
 ```
 
 Requires extension: **Local Lua Debugger** (tomblind)
+Requires extension: **Lua** language server (sumneko)
 F5 to launch, breakpoints work on variable assignments and function starts.

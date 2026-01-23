@@ -2,6 +2,8 @@ local Logger = require("src.logger")
 
 local Scenes = {}
 
-Logger.info("Initializing scenes...")
+function Scenes:initialize() 
+    Logger.info("Initializing Scenes...")
+end
 
 return Scenes

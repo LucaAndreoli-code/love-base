@@ -1,84 +1,66 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
-
-## Project Overview
-
-Love2D game template using a modular "init aggregator" pattern for clean namespace organization. Built for LÖVE 11.5.
+> Operational guide for Claude Code. Contains project context, conventions, and status.
 
 ## Commands
 
 ```bash
-# Run the game (INFO level logging)
-love .
-
-# Run with debug mode (DEBUG logging + hot reload via lurker.lua + VS Code debugger)
-love . --debug
+love .           # Run (INFO logging)
+love . --debug   # Debug (DEBUG logging + hot reload + debugger)
 ```
-
-For building distributable packages, use [love-build](https://github.com/ellraiser/love-build) with the `build.lua` configuration.
 
 ## Architecture
 
-### Init Aggregator Pattern
+**Init Aggregator Pattern**: each directory has an `init.lua` that aggregates submodules. Single entry point: `src/init.lua` → `Game`.
 
-Each module directory has an `init.lua` that aggregates and exposes submodules. The master loader at `src/init.lua` provides a single entry point:
-
-```lua
-local Game = require("src.init")
-Game.logger     -- 4-level logging system
-Game.debug      -- debug overlay (FPS, toggle with F1)
-Game.constants  -- centralized config values
-Game.scenes     -- game scenes
-Game.systems    -- core systems (state machine, input, assets)
-Game.ui         -- reusable UI components
-Game.utils      -- helper functions
+```
+Game.logger, Game.debug, Game.constants, Game.scenes, Game.systems, Game.ui, Game.utils
 ```
 
-### Key Files
+## Key Files
 
-- `main.lua` - Minimal entry point, delegates to `src/init.lua`
-- `src/init.lua` - Master loader with `load()`, `update(dt)`, `draw()`, `keypressed(key)`
-- `src/logger.lua` - 4-level logging (DEBUG, INFO, WARNING, ERROR) with ANSI colors
-- `src/debug.lua` - Debug overlay (FPS, toggle with F1), only active with `--debug` flag
-- `conf.lua` - LÖVE configuration (1280x720 window)
-- `build.lua` - love-build configuration for Windows/macOS/Linux
+| File | Purpose |
+|------|---------|
+| `main.lua` | Minimal entry point |
+| `src/init.lua` | Master loader |
+| `src/logger.lua` | 4-level logging |
+| `src/debug.lua` | Debug overlay (F1) |
+| `conf.lua` | LÖVE config (1280x720) |
 
-### Hot Reload (Debug Mode)
+## Conventions
 
-When running with `--debug`, `libs/lurker/lurker.lua` enables live code reloading. Errors display on screen. The entry point `main.lua` is reloaded when any `.lua` file changes.
+- **Naming**: `snake_case` for files, `camelCase` for variables/functions, `PascalCase` for classes/modules
+- **Constants**: never hardcode values, always use `Game.constants.x`
+- **UI Components**: factory pattern with `Component.new()` + metatable
+- **Comments**: (if needed) write comments in english
 
-### Logger Usage
+## Project Status
 
-```lua
--- Via Game namespace (after Game.load())
-Game.logger.debug("message", "source")   -- only with --debug
-Game.logger.info("message", "source")
-Game.logger.warning("message", "source")
-Game.logger.error("message", "source")
+### Implemented ✅
+- Init aggregator pattern
+- Logger (4 levels, ANSI colors)
+- Debug overlay (FPS, F1 toggle)
+- Hot reload (lurker.lua)
+- Base project structure
 
--- Direct require (for modules that load before Game)
-local Logger = require("src.logger")
-Logger.info("message", "source")
-```
+### TODO 🚧
+- [ ] Event System (pub/sub)
+- [ ] Timer/Tween system
+- [ ] Input handler (action mapping, rebinding)
+- [ ] State machine (scene transitions)
+- [ ] Asset manager (cache, lazy loading)
+- [ ] Camera system (follow, shake, bounds)
+- [ ] Save/Load system
 
-### Scene Interface
+## Development Log
 
-Scenes in `src/scenes/` follow this interface:
+### 2025-01-24
+- Restructured README.md and CLAUDE.md
+- Defined TODO list of systems to implement
 
-```lua
-function Scene:enter() end
-function Scene:exit() end
-function Scene:update(dt) end
-function Scene:draw() end
-function Scene:keypressed(key) end
-```
+### 2025-01-22
+- Implemented init aggregator pattern architecture
 
-### Module Guidelines
+---
 
-- `constants/` - Config values (colors, dimensions, speeds)
-- `systems/` - Core architecture (state machine, input handler, asset manager)
-- `scenes/` - Game states (menu, game, pause, gameover)
-- `ui/` - Reusable components across scenes
-- `utils/` - Generic helpers (math, string, table functions)
-- `entities/` - Add when you have 3+ game object types with similar logic
+*Update this file when making important architectural decisions.*

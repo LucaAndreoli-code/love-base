@@ -63,7 +63,7 @@ return Systems
 ```lua
 local Game = {}
 
-function Game:load()
+function Game.load()
     Game.logger = require("src.logger")
     Game.debug = require("src.debug")
     Game.constants = require("src.constants.init")
@@ -81,7 +81,7 @@ function Game:load()
     Game.logger.info("Game Started!")
 end
 
-function Game.loveload() Game:load() end
+function Game.load() ... end
 function Game.update(dt) ... end
 function Game.draw() Game.debug:draw() end
 function Game.keypressed(key) Game.debug:keypressed(key) end
@@ -94,7 +94,7 @@ return Game
 local Game = require("src.init")
 
 function love.load()
-    Game.loveload()
+    Game.load()
 end
 
 function love.update(dt)
@@ -157,7 +157,7 @@ Fundamental architectural systems reusable across projects:
 #### `logger.lua` and `debug.lua` (directly in `src/`)
 Logging and debug systems are part of the Game namespace. After initialization, they are accessible via:
 ```lua
--- Via Game namespace (recommended after Game:load())
+-- Via Game namespace (recommended after Game.load())
 Game.logger.info("Message", "source")
 Game.debug:toggle()
 

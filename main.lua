@@ -1,7 +1,7 @@
 local Game = require("src.init")
 
 function love.load()
-    Game.loveload()
+    Game.load()
 end
 
 function love.update(dt)

@@ -1,6 +1,6 @@
 local Game = {}
 
-function Game:load()
+function Game.load()
     Game.logger = require("src.logger")
     Game.debug = require("src.debug")
 
@@ -19,10 +19,6 @@ function Game:load()
 
     Game.logger.info("Game Started!")
 end 
-
-function Game.loveload() -- Load game systems, scenes and stuff here
-    Game:load()
-end
 
 function Game.update(dt)
     -- Update game state here

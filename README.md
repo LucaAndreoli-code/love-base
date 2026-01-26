@@ -12,6 +12,7 @@ love . --debug   # Debug mode (hot reload + verbose logging)
 ## Project Structure
 
 ```
+├── docs/              # Docs about element of the template
 ├── assets/
 │   ├── data/          # JSON, Lua tables, presets
 │   ├── font/          # Custom fonts

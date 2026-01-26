@@ -72,7 +72,7 @@ Framework: busted (installed via LuaRocks)
 ### TODO 🚧
 1. [X] Setup busted (test framework)
 2. [X] Entity + test
-3. [ ] Entity Manager + test
+3. [X] Entity Manager + test
 4. [ ] Math Utils + test
 5. [ ] Behaviors + test
 6. [ ] Collision Utils + test
@@ -86,7 +86,7 @@ After completing these, build Asteroids as the first game using the template.
 ## Development Log
 
 ### 2025-01-26
-- 
+- Added Entity, Entity Manager
 
 ### 2025-01-24
 - Restructured README.md and CLAUDE.md

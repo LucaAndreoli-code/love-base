@@ -17,7 +17,7 @@ function Game.load()
     Game.ui:load()
     Game.debug:load()
 
-    Game.logger.info("Game Started!")
+    Game.logger.info("[Game] Game Started!")
 end 
 
 function Game.update(dt)

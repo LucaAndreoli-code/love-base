@@ -1,2 +1,5 @@
 .DS_Store
 .vscode
+
+/assets/sprites/input/keyboard
+/assets/sprites/input/xbox

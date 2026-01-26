@@ -7,6 +7,8 @@
 ```bash
 love .           # Run (INFO logging)
 love . --debug   # Debug (DEBUG logging + hot reload + debugger)
+busted           # Run all tests
+busted spec/entity_spec.lua  # Run single test
 ```
 
 ## Architecture
@@ -27,12 +29,35 @@ Game.logger, Game.debug, Game.constants, Game.scenes, Game.systems, Game.ui, Gam
 | `src/debug.lua` | Debug overlay (F1) |
 | `conf.lua` | LÖVE config (1280x720) |
 
+## Architecture Principles
+
+- **LÖVE is low-level**: provides rendering, input, audio, game loop. No built-in structure for game objects.
+- **Systems are organizational**: Entity, EntityManager, Timer, StateMachine are patterns for code organization, not LÖVE extensions.
+- **Composition over inheritance**: Behaviors as utility functions, not rigid class hierarchies.
+- **Events = broadcast** ("something happened, whoever cares reacts"), **References = direct** ("you, do this").
+
 ## Conventions
 
 - **Naming**: `snake_case` for files, `camelCase` for variables/functions, `PascalCase` for classes/modules
 - **Constants**: never hardcode values, always use `Game.constants.x`
 - **UI Components**: factory pattern with `Component.new()` + metatable
 - **Comments**: (if needed) write comments in english
+- **Type Annotations**: use LuaLS annotations for all systems:
+```lua
+---@class Entity
+---@field alive boolean
+---@field tags table<string, boolean>
+```
+
+### Docs
+
+All `.lua` files (other than logger, debug, lurker.lua and generica init aggregator pattern files) should be documented under the folder `docs/`
+
+## Testing
+
+All generic systems in `src/` must have tests in `spec/`. Game-specific code tested manually.
+
+Framework: busted (installed via LuaRocks)
 
 ## Project Status
 
@@ -42,17 +67,26 @@ Game.logger, Game.debug, Game.constants, Game.scenes, Game.systems, Game.ui, Gam
 - Debug overlay (FPS, F1 toggle)
 - Hot reload (lurker.lua)
 - Base project structure
+- Entity + Test
 
 ### TODO 🚧
-- [ ] Event System (pub/sub)
-- [ ] Timer/Tween system
-- [ ] Input handler (action mapping, rebinding)
-- [ ] State machine (scene transitions)
-- [ ] Asset manager (cache, lazy loading)
-- [ ] Camera system (follow, shake, bounds)
-- [ ] Save/Load system
+1. [X] Setup busted (test framework)
+2. [X] Entity + test
+3. [ ] Entity Manager + test
+4. [ ] Math Utils + test
+5. [ ] Behaviors + test
+6. [ ] Collision Utils + test
+7. [ ] Timer + test
+8. [ ] State Machine + test
+9. [ ] Update init aggregators
+10. [ ] Integration test
+
+After completing these, build Asteroids as the first game using the template.
 
 ## Development Log
+
+### 2025-01-26
+- 
 
 ### 2025-01-24
 - Restructured README.md and CLAUDE.md

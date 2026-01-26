@@ -70,6 +70,12 @@ Game.logger.error("msg", "source")
 - VS Code debugger support
 - FPS overlay (F1)
 
+## Tests
+
+All generic systems in `src/` must have tests in `spec/`. Game-specific code tested manually.
+
+Framework: busted (installed via LuaRocks)
+
 ## Build
 
 Uses [love-build](https://github.com/ellraiser/love-build) for distribution packages.

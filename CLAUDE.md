@@ -100,11 +100,11 @@ Framework: busted (installed via LuaRocks)
 6. [X] CollisionUtils + test
 7. [X] StateMachine + test
 8. ~~[ ] Update init aggregators~~ (Update init aggregators only when i need a specific module)
-9. [ ] Integration test
+9. [X] Integration test
 
 ### TODO After (when needed)
-- [ ] Timer + test (cooldowns, delays, tweens)
 - [ ] Input Handler (rebinding, gamepad)
+- [ ] Timer + test (cooldowns, delays, tweens)
 - [ ] Save/Load system
 
 After completing TODO, build Asteroids as the first game using the template.

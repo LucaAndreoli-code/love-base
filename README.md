@@ -87,10 +87,12 @@ Uses [love-build](https://github.com/ellraiser/love-build) for distribution pack
 {
   "Lua.runtime.version": "LuaJIT",
   "Lua.workspace.library": [
-    "${3rd}/love2d/library"
+    "${3rd}/love2d/library",
+    "${3rd}/busted/library"
   ],
   "Lua.diagnostics.globals": [
-    "love"
+    "love",
+    "busted"
   ]
 }
 ```

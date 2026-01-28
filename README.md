@@ -1,88 +1,88 @@
 # Love2D Base Template
 
-Modular game template for LÖVE 11.5 with init aggregator pattern.
+A modular game template for LÖVE 11.5. Includes essential systems for entity management, state machines, collision detection, and UI components. Designed for developers who want a clean starting point without the overhead of a full engine.
 
 ## Quick Start
 
 ```bash
 love .           # Run game
-love . --debug   # Debug mode (hot reload + verbose logging)
+love . --debug   # Debug mode (hot reload, verbose logging, F1 overlay)
 ```
 
 ## Project Structure
 
 ```
-├── docs/              # Docs about element of the template
-├── assets/
-│   ├── data/          # JSON, Lua tables, presets
-│   ├── font/          # Custom fonts
-│   ├── icon/          # Game icon
-│   ├── sounds/        # Audio files
-│   └── sprites/       # Images and spritesheets
-├── libs/              # Third-party libraries (lurker, etc.)
-├── shaders/           # GLSL shaders
+├── main.lua           # Entry point (minimal, delegates to src/init.lua)
+├── conf.lua           # LÖVE configuration (1280x720)
 ├── src/
-│   ├── constants/     # Config values (colors, sizes, speeds)
-│   ├── scenes/        # Game states (menu, game, pause)
-│   ├── systems/       # Core systems (state machine, input, assets)
-│   ├── ui/            # Reusable UI components
-│   ├── utils/         # Helper functions
-│   ├── init.lua       # Master loader
-│   ├── logger.lua     # Logging system
-│   └── debug.lua      # Debug overlay
-├── main.lua           # Entry point
-├── conf.lua           # LÖVE configuration
-└── build.lua          # love-build config
+│   ├── init.lua       # Master loader (Game object)
+│   ├── logger.lua     # 4-level logging (DEBUG/INFO/WARNING/ERROR)
+│   ├── debug.lua      # Debug overlay (F1 toggle)
+│   ├── constants/     # Configuration values (colors, gameplay)
+│   ├── scenes/        # Game states (add your scenes here)
+│   ├── systems/       # Core systems (entity, state machine)
+│   ├── ui/            # UI components (button)
+│   └── utils/         # Helper functions (math, collision)
+├── spec/              # Test files (busted framework)
+├── docs/              # System documentation
+├── assets/
+│   ├── sprites/       # Images and spritesheets
+│   ├── sounds/        # Audio files
+│   ├── font/          # Custom fonts
+│   └── data/          # JSON, Lua tables
+├── libs/              # Third-party libraries (lurker)
+└── shaders/           # GLSL shaders
 ```
 
-## Architecture
+## Available Systems
 
-### Init Aggregator Pattern
-
-Each directory has an `init.lua` that exposes submodules. Single entry point:
-
-```lua
-local Game = require("src.init")
-
-Game.logger      -- Logging (DEBUG/INFO/WARNING/ERROR)
-Game.debug       -- Debug overlay (F1 to toggle)
-Game.constants   -- Centralized config
-Game.scenes      -- Game scenes
-Game.systems     -- Core systems
-Game.ui          -- UI components
-Game.utils       -- Helpers
-```
-
-### Logger
-
-```lua
-Game.logger.debug("msg", "source")    -- Only in --debug mode
-Game.logger.info("msg", "source")
-Game.logger.warning("msg", "source")
-Game.logger.error("msg", "source")
-```
+| System | Access | Description |
+|--------|--------|-------------|
+| **Entity** | `Game.systems.entity` | Base class for game objects (position, velocity, tags, lifecycle) |
+| **EntityManager** | `Game.systems.entityManager` | Entity lifecycle and tag-based queries (O(1) lookup) |
+| **StateMachine** | `Game.systems.stateMachine` | Stack-based state management for scenes and overlays |
+| **MathUtils** | `Game.utils.math` | Distance, normalize, angle, lerp, clamp |
+| **CollisionUtils** | `Game.utils.collision` | Circle, rectangle, and point collision detection |
+| **Button** | `Game.ui.button` | Clickable UI component with hover/press states |
+| **Logger** | `Game.logger` | Colored console output with log levels |
 
 ## Debug Mode
 
-`--debug` flag enables:
-- DEBUG level logging
-- Hot reload via lurker.lua
-- VS Code debugger support
-- FPS overlay (F1)
+Run with `love . --debug` to enable:
 
-## Tests
+- **DEBUG logging** — Verbose output from all systems
+- **Hot reload** — Automatic code refresh on file save (via lurker.lua)
+- **VS Code debugger** — Breakpoint support with lldebugger
+- **F1 overlay** — FPS counter and entity hitbox visualization
 
-All generic systems in `src/` must have tests in `spec/`. Game-specific code tested manually.
+Debug features are disabled in normal mode (`love .`).
 
-Framework: busted (installed via LuaRocks)
+## Testing
 
-## Build
+Tests use the [busted](https://lunarmodules.github.io/busted/) framework.
+
+```bash
+busted                        # Run all tests
+busted spec/entity_spec.lua   # Run single test file
+busted --verbose              # Verbose output
+```
+
+Install via LuaRocks: `luarocks install busted`
+
+## Building
 
 Uses [love-build](https://github.com/ellraiser/love-build) for distribution packages.
 
+```bash
+love-build . --windows --macos --linux
+```
+
+See `build.lua` for configuration options.
+
 ## VS Code Setup
 
-`.vscode/settings.json` configuration:
+### settings.json
+
 ```json
 {
   "Lua.runtime.version": "LuaJIT",
@@ -90,40 +90,39 @@ Uses [love-build](https://github.com/ellraiser/love-build) for distribution pack
     "${3rd}/love2d/library",
     "${3rd}/busted/library"
   ],
-  "Lua.diagnostics.globals": [
-    "love",
-    "busted"
+  "Lua.diagnostics.globals": ["love"]
+}
+```
+
+### launch.json
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lua-local",
+      "request": "launch",
+      "name": "Run LÖVE",
+      "program": { "command": "love" },
+      "args": ["."]
+    },
+    {
+      "type": "lua-local",
+      "request": "launch",
+      "name": "Debug LÖVE",
+      "program": { "command": "love" },
+      "args": [".", "--debug"]
+    }
   ]
 }
 ```
 
-`.vscode/launch.json` configuration:
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "type": "lua-local",
-            "request": "launch",
-            "name": "Run LÖVE",
-            "program": {
-                "command": "love"
-            },
-            "args": ["."]
-        },
-        {
-            "type": "lua-local",
-            "request": "launch",
-            "name": "Debug LÖVE",
-            "program": {
-                "command": "love"
-            },
-            "args": [".", "--debug"]
-        }
-    ]
-}
-```
+### Required Extensions
 
-Required extensions:
-- **Lua** (sumneko) — Language server
-- **Local Lua Debugger** (tomblind) — Debugging
+- [Lua](https://marketplace.visualstudio.com/items?itemName=sumneko.lua) (sumneko) — Language server
+- [Local Lua Debugger](https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode) (tomblind) — Debugging
+
+---
+
+See `CLAUDE.md` for architecture details and development conventions.

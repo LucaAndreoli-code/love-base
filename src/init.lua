@@ -18,7 +18,7 @@ function Game.load()
     Game.debug:load()
 
     Game.logger.info("[Game] Game Started!")
-end 
+end
 
 function Game.update(dt)
     -- Update game state here
@@ -30,7 +30,6 @@ function Game.draw()
 end
 
 function Game.keypressed(key)
-    -- Handle other keypresses here
     Game.debug:keypressed(key)
 end
 

@@ -34,6 +34,7 @@ Game.systems         -- Core systems
   .entity            -- Base entity class
   .entityManager     -- Entity lifecycle and queries
   .stateMachine      -- State management
+  .inputHandler      -- Input abstraction and rebinding
 Game.ui              -- UI components
   .button            -- Clickable button
 Game.utils           -- Helper functions
@@ -158,6 +159,7 @@ All systems in `src/` should have documentation in `docs/`. Exceptions: logger, 
 | `src/systems/entity.lua` | Base entity class with drawDebug() |
 | `src/systems/entity_manager.lua` | Entity lifecycle and tag queries |
 | `src/systems/state_machine.lua` | Stack-based state management |
+| `src/systems/input_handler.lua` | Input abstraction, rebinding, buffering |
 | `src/utils/math.lua` | Math utilities |
 | `src/utils/collision.lua` | Collision detection |
 | `src/ui/button.lua` | Clickable button component |
@@ -236,6 +238,22 @@ Pure functions, no side effects. **All rectangles use CENTER coordinates.**
 - `pointCircle(px, py, circle)` - Point vs circle
 - `pointRect(px, py, rect)` - Point vs rectangle
 
+### InputHandler
+
+Abstracts input from keyboard/gamepad into actions. Tracks press timing for buffering.
+
+**Methods:**
+- `new(config)` - Create handler with optional custom bindings
+- `update()` - Process input events (call every frame)
+- `isHeld(action)` - True while action is held
+- `isPressed(action)` - True only on press frame
+- `isReleased(action)` - True only on release frame
+- `wasPressedWithin(action, seconds)` - True if pressed within time window
+- `getAxis(axisName)` - Returns -1 to 1 for horizontal/vertical
+- `rebind(action, deviceType, key)` - Change binding at runtime
+- `getBindings()` - Get current bindings table
+- `getActiveDevice()` - Returns "keyboard" or "gamepad"
+
 ### Button (UI)
 
 Clickable button with hover/press states. Mouse only (keyboard navigation planned with InputHandler).
@@ -257,7 +275,7 @@ Framework: [busted](https://lunarmodules.github.io/busted/) (install via LuaRock
 
 - All generic systems in `src/` must have tests in `spec/`
 - Game-specific code tested manually
-- Currently: 111 tests passing
+- Currently: 162 tests passing
 
 ---
 
@@ -273,16 +291,20 @@ Framework: [busted](https://lunarmodules.github.io/busted/) (install via LuaRock
 - StateMachine + tests + docs
 - MathUtils + CollisionUtils + tests + docs
 - Button UI component + docs
+- InputHandler + tests + docs
 
 ### TODO
 
-- [ ] Input Handler (rebinding, gamepad support)
 - [ ] Timer system (cooldowns, delays, tweens)
 - [ ] Save/Load system
 
 ---
 
 ## Development Log
+
+### 2026-01-29
+- Added InputHandler system (action mapping, rebinding, press/release/held states, input buffering, gamepad support)
+- 162 tests passing
 
 ### 2026-01-28
 - Enforced init aggregator pattern across all modules

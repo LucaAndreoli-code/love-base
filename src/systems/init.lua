@@ -14,6 +14,9 @@ function Systems:load()
     Systems.stateMachine:new()
     Logger.info("[Systems] State machine system loaded")
 
+    Systems.inputHandler = require("src.systems.input_handler")
+    Logger.info("[Systems] Input handler system loaded")
+
     Logger.info("[Systems] Done!")
 end
 

@@ -24,6 +24,10 @@ function Systems:load()
     Systems.InputContext = inputModule.InputContext
     Logger.info("[Systems] Input handler system loaded")
 
+    -- Input Prompts System
+    Systems.InputPrompts = require("src.systems.input_handler.input_prompts")
+    Logger.info("[Systems] Input prompts system loaded")
+
     Logger.info("[Systems] Done!")
 end
 

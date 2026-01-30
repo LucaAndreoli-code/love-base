@@ -9,6 +9,7 @@ love . --debug   # Debug (DEBUG logging + hot reload + debugger)
 busted           # Run all tests
 ```
 
+## Conventions
 - **LÖVE is low-level**: provides rendering, input, audio, game loop. No built-in structure for game objects.
 - **Systems are organizational**: Entity, EntityManager, Timer, StateMachine are patterns for code organization, not LÖVE extensions.
 - **Composition over inheritance**: Behaviors as utility functions, not rigid class hierarchies.
@@ -21,13 +22,11 @@ busted           # Run all tests
 - **Type Annotations**: use LuaLS annotations for all systems.
 - **Comments**: (if needed) write comments in english
 - **Documentation**: All systems should be documented under the folder `docs/`
-
-## Conventions
-
 - **Naming**: `snake_case` for files, `camelCase` for variables/functions, `PascalCase` for classes/modules
 - **Constants**: never hardcode values, always use `Game.constants.x`
 - **UI Components**: factory pattern with `Component.new()` + metatable
 - **Comments**: (if needed) write comments in english
+- **Logger**: Use
 - **Type Annotations**: use LuaLS annotations for all systems:
 ```lua
 ---@class Entity

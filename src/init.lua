@@ -22,6 +22,12 @@ function Game.load()
     Game.input = InputHandler.new(Game.constants.inputDefaults.settings)
     InputHandler.setupFromDefaults(Game.input, Game.constants.inputDefaults)
 
+    -- Create input prompts instance (for displaying input icons)
+    Game.prompts = Game.systems.InputPrompts.new(Game.input)
+
+    -- Initialize debug with prompts reference (registers input callback)
+    Game.debug:init(Game.prompts)
+
     -- Debug context always active in debug mode
     if arg and arg[2] == "--debug" then
         Game.input:pushContext("debug")
@@ -49,7 +55,7 @@ function Game.lateUpdate()
 end
 
 function Game.draw()
-    -- Render game here
+    -- Debug overlay on top
     Game.debug:draw()
 end
 

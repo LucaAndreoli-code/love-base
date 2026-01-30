@@ -17,11 +17,35 @@ function Game.load()
     Game.ui:load()
     Game.debug:load()
 
+    -- Create input handler instance
+    local InputHandler = Game.systems.inputHandler
+    Game.input = InputHandler.new(Game.constants.inputDefaults.settings)
+    InputHandler.setupFromDefaults(Game.input, Game.constants.inputDefaults)
+
+    -- Debug context always active in debug mode
+    if arg and arg[2] == "--debug" then
+        Game.input:pushContext("debug")
+    end
+
+    -- Initial context
+    Game.input:setContext("menu")
+
     Game.logger.info("[Game] Game Started!")
-end 
+end
 
 function Game.update(dt)
-    -- Update game state here
+    -- Input update BEFORE game logic
+    Game.input:update(dt)
+
+    -- Debug controls
+    if Game.input:isPressed("debug_toggle") then
+        Game.debug:toggle()
+    end
+end
+
+function Game.lateUpdate()
+    -- Input late update AFTER game logic
+    Game.input:lateUpdate()
 end
 
 function Game.draw()

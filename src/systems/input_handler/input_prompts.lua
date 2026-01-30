@@ -205,7 +205,18 @@ function InputPrompts:getSpriteForInput(inputType, inputValue, outline)
     end
 
     local device = inputType == "mouse" and "keyboard" or inputType
-    return self:_loadSprite(device, spriteName)
+
+    -- Try to load sprite
+    local sprite = self:_loadSprite(device, spriteName)
+
+    -- Fallback: if outline requested but missing, try loading the base sprite
+    if not sprite and outline then
+        -- Remove "_outline" suffix
+        local baseName = spriteName:sub(1, -9)
+        sprite = self:_loadSprite(device, baseName)
+    end
+
+    return sprite
 end
 
 --- Gets sprite for an action based on current device

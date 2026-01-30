@@ -83,10 +83,10 @@ return {
 
     xbox = {
         -- Face buttons
-        a = "xbox_button_a",
-        b = "xbox_button_b",
-        x = "xbox_button_x",
-        y = "xbox_button_y",
+        a = "xbox_button_color_a",
+        b = "xbox_button_color_b",
+        x = "xbox_button_color_x",
+        y = "xbox_button_color_y",
 
         -- System buttons
         start = "xbox_button_start",
@@ -100,8 +100,16 @@ return {
         righttrigger = "xbox_rt",
 
         -- Sticks
-        leftstick = "xbox_ls",
-        rightstick = "xbox_rs",
+        leftstick = "xbox_stick_l_press",
+        rightstick = "xbox_stick_r_press",
+        leftstick_left = "xbox_stick_l_left",
+        leftstick_right = "xbox_stick_l_right",
+        leftstick_up = "xbox_stick_l_up",
+        leftstick_down = "xbox_stick_l_down",
+        rightstick_left = "xbox_stick_r_left",
+        rightstick_right = "xbox_stick_r_right",
+        rightstick_up = "xbox_stick_r_up",
+        rightstick_down = "xbox_stick_r_down",
 
         -- D-pad
         dpup = "xbox_dpad_up",

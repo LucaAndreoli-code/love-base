@@ -30,6 +30,7 @@ function InputPrompts.new(inputHandler)
     }
     self.basePath = "assets/sprites/input"
     self.inputHandler = inputHandler
+    self.axisState = {} -- Track axis state to avoid spam
 
     -- Hook into InputHandler for device detection
     self:_hookDeviceDetection()
@@ -47,6 +48,7 @@ function InputPrompts:_hookDeviceDetection()
     local originalKeyreleased = self.inputHandler.keyreleased
     local originalGamepadpressed = self.inputHandler.gamepadpressed
     local originalGamepadreleased = self.inputHandler.gamepadreleased
+    local originalGamepadaxis = self.inputHandler.gamepadaxis
     local originalMousepressed = self.inputHandler.mousepressed
     local originalMousereleased = self.inputHandler.mousereleased
 
@@ -78,6 +80,13 @@ function InputPrompts:_hookDeviceDetection()
         return originalGamepadreleased(handler, joystick, button)
     end
 
+    -- Wrap gamepadaxis
+    self.inputHandler.gamepadaxis = function(handler, joystick, axis, value)
+        prompts:setDevice("xbox")
+        prompts:_handleAxisInput(axis, value)
+        return originalGamepadaxis(handler, joystick, axis, value)
+    end
+
     -- Wrap mousepressed
     self.inputHandler.mousepressed = function(handler, x, y, button, istouch, presses)
         prompts:setDevice("keyboard")
@@ -89,6 +98,41 @@ function InputPrompts:_hookDeviceDetection()
     self.inputHandler.mousereleased = function(handler, x, y, button, istouch, presses)
         prompts:_notifyInput("mouse", button, false)
         return originalMousereleased(handler, x, y, button, istouch, presses)
+    end
+end
+
+--- Handles axis input with threshold logic
+---@private
+---@param axis string
+---@param value number
+function InputPrompts:_handleAxisInput(axis, value)
+    local threshold = 0.5
+    local pressed = math.abs(value) > threshold
+
+    -- Map axis and direction to sprite key
+    local spriteKey = nil
+
+    if axis == "triggerleft" then
+        spriteKey = "lefttrigger"
+    elseif axis == "triggerright" then
+        spriteKey = "righttrigger"
+    elseif axis == "leftx" then
+        spriteKey = "leftstick_" .. (value > 0 and "right" or "left")
+    elseif axis == "lefty" then
+        spriteKey = "leftstick_" .. (value > 0 and "down" or "up")
+    elseif axis == "rightx" then
+        spriteKey = "rightstick_" .. (value > 0 and "right" or "left")
+    elseif axis == "righty" then
+        spriteKey = "rightstick_" .. (value > 0 and "down" or "up")
+    end
+
+    if not spriteKey then return end
+
+    -- Only notify on state change
+    -- We use the spriteKey as the unique identifier for the state tracking
+    if self.axisState[spriteKey] ~= pressed then
+        self.axisState[spriteKey] = pressed
+        self:_notifyInput("xbox", spriteKey, pressed)
     end
 end
 

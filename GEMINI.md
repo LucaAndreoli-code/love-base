@@ -13,7 +13,8 @@ busted           # Run all tests
 - **LÖVE is low-level**: provides rendering, input, audio, game loop. No built-in structure for game objects.
 - **Systems are organizational**: Entity, EntityManager, Timer, StateMachine are patterns for code organization, not LÖVE extensions.
 - **Composition over inheritance**: Behaviors as utility functions, not rigid class hierarchies.
-- **Events = broadcast** ("something happened, whoever cares reacts"), **References = direct** ("you, do this").
+- **Events = broadcast** ("something happened, whoever cares reacts"), 
+- **References = direct** ("you, do this").
 - **Center-based coordinates**: Entity x, y is always center. Rectangles in CollisionUtils use center, not top-left.
 - **Tags for identity**: Entities use tags (table<string, boolean>) for identification and querying, not class hierarchies.
 - **Init Aggregator Pattern**: All systems are initialized in `src/init.lua` using `System.new()` + metatable.

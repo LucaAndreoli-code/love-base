@@ -7,59 +7,27 @@
 love .           # Run (INFO logging)
 love . --debug   # Debug (DEBUG logging + hot reload + debugger)
 busted           # Run all tests
-busted spec/entity_spec.lua  # Run single test
 ```
 
-## Architecture
-
-**Init Aggregator Pattern**: each directory has an `init.lua` that aggregates submodules. Single entry point: `src/init.lua` → `Game`.
-```
-Game.logger, Game.debug, Game.constants, Game.scenes, Game.systems, Game.ui, Game.utils
-```
-
-**Systems access:**
-```
-Game.systems.entity
-Game.systems.entityManager
-Game.systems.stateMachine
-```
-
-**Utils access:**
-```
-Game.utils.math
-Game.utils.collision
-```
-
-## Key Files
-
-| File | Purpose |
-|------|---------|
-| `main.lua` | Minimal entry point |
-| `src/init.lua` | Master loader |
-| `src/logger.lua` | 4-level logging |
-| `src/debug.lua` | Debug overlay (F1) |
-| `conf.lua` | LÖVE config (1280x720) |
-| `src/systems/entity.lua` | Base entity class (position, velocity, tags, lifecycle) |
-| `src/systems/entity_manager.lua` | Entity management and queries by tag |
-| `src/systems/state_machine.lua` | Game states with stack support for pause |
-| `src/utils/math.lua` | Math utilities (distance, normalize, angle, lerp, clamp) |
-| `src/utils/collision.lua` | Collision detection (circle, rect, point) |
-
-## Architecture Principles
-
+## Conventions
 - **LÖVE is low-level**: provides rendering, input, audio, game loop. No built-in structure for game objects.
 - **Systems are organizational**: Entity, EntityManager, Timer, StateMachine are patterns for code organization, not LÖVE extensions.
 - **Composition over inheritance**: Behaviors as utility functions, not rigid class hierarchies.
-- **Events = broadcast** ("something happened, whoever cares reacts"), **References = direct** ("you, do this").
+- **Events = broadcast** ("something happened, whoever cares reacts"), 
+- **References = direct** ("you, do this").
 - **Center-based coordinates**: Entity x, y is always center. Rectangles in CollisionUtils use center, not top-left.
 - **Tags for identity**: Entities use tags (table<string, boolean>) for identification and querying, not class hierarchies.
-
-## Conventions
-
+- **Init Aggregator Pattern**: All systems are initialized in `src/init.lua` using `System.new()` + metatable.
+- **Mixin Pattern**: All systems use mixin pattern for code organization.
+- **Modular Structure**: All systems are split into multiple files for better organization.
+- **Type Annotations**: use LuaLS annotations for all systems.
+- **Comments**: (if needed) write comments in english
+- **Documentation**: All systems should be documented under the folder `docs/`
 - **Naming**: `snake_case` for files, `camelCase` for variables/functions, `PascalCase` for classes/modules
 - **Constants**: never hardcode values, always use `Game.constants.x`
 - **UI Components**: factory pattern with `Component.new()` + metatable
 - **Comments**: (if needed) write comments in english
+- **Logger**: Use
 - **Type Annotations**: use LuaLS annotations for all systems:
 ```lua
 ---@class Entity
@@ -67,87 +35,29 @@ Game.utils.collision
 ---@field tags table<string, boolean>
 ```
 
-### Docs
+## Systems Reference
 
 All `.lua` files (other than logger, debug, lurker.lua and generic init aggregator pattern files) should be documented under the folder `docs/`
 
-## Testing
-
-All generic systems in `src/` must have tests in `spec/`. Game-specific code tested manually.
-
-Framework: busted (installed via LuaRocks)
-
-## Project Status
-
-### Implemented ✅
-- Init aggregator pattern
-- Logger (4 levels, ANSI colors)
-- Debug overlay (FPS, F1 toggle)
-- Hot reload (lurker.lua)
-- Base project structure
-- Entity + test + docs
-- EntityManager + test + docs
-- MathUtils + test + docs
-- CollisionUtils + test + docs
-- StateMachine + test + docs
-
-### TODO 🚧
-1. [X] Setup busted (test framework)
-2. [X] Entity + test
-3. [X] EntityManager + test
-4. [X] MathUtils + test
-5. ~~[ ] Behaviors + test~~ (Behaviors are game-specific, not template)
-6. [X] CollisionUtils + test
-7. [X] StateMachine + test
-8. ~~[ ] Update init aggregators~~ (Update init aggregators only when i need a specific module)
-9. [X] Integration test
-
-### TODO After (when needed)
-- [ ] Input Handler (rebinding, gamepad)
-- [ ] Timer + test (cooldowns, delays, tweens)
-- [ ] Save/Load system
-
-After completing TODO, build Asteroids as the first game using the template.
-
-## Systems Reference
-
 ### Entity
 Base class for all game objects. Fields: x, y, vx, vy, rotation, radius, alive, tags.
-Methods: new(config), update(dt), draw(), destroy(), addTag(tag), removeTag(tag), hasTag(tag)
+Methods: new(config), update(dt), draw(), destroy(), addTag(tag), removeTag(tag), hasTag(tag) (see docs/systems/entity.md for more info)
 
 ### EntityManager
 Manages entity lifecycle and queries. Uses tag cache for O(1) lookups.
-Methods: new(), add(entity), remove(entity), getByTag(tag), refreshTags(entity), getAll(), update(dt), draw(), cleanup(), clear(), count()
+Methods: new(), add(entity), remove(entity), getByTag(tag), refreshTags(entity), getAll(), update(dt), draw(), cleanup(), clear(), count() (see docs/systems/entity_manager.md for more info)
 
 ### StateMachine
 Game state management with stack for layered states (pause over playing).
 Callbacks: enter(params), exit(params), update(dt), draw(), pause(), resume(params)
-Methods: new(), addState(name, callbacks), setState(name, params), pushState(name, params), popState(params), getState(), update(dt), draw()
+Methods: new(), addState(name, callbacks), setState(name, params), pushState(name, params), popState(params), getState(), update(dt), draw() (see docs/systems/state_machine.md for more info)
 
 ### MathUtils
-Pure functions: distance, distanceSquared, length, normalize, angle, direction, lerp, clamp
+Pure functions: distance, distanceSquared, length, normalize, angle, direction, lerp, clamp (see docs/systems/math_utils.md for more info)
 
 ### CollisionUtils
 Pure functions: circleCircle, rectRect, circleRect, pointCircle, pointRect
-Note: Rectangles use center coordinates (x, y = center, not top-left)
+Note: Rectangles use center coordinates (x, y = center, not top-left) (see docs/systems/collision_utils.md for more info)
 
-## Development Log
-
-### 2025-01-26
-- Added Entity system (position, velocity, rotation, radius, tags, lifecycle)
-- Added EntityManager (add, remove, query by tag with cache, cleanup)
-- Added MathUtils (distance, normalize, angle, direction, lerp, clamp)
-- Added CollisionUtils (circle/rect/point collisions, center-based coords)
-- Added StateMachine (states, stack for pause, params passing)
-- All systems have tests in spec/ and docs in docs/
-- Decided: Behaviors are game-specific, not template
-
-### 2025-01-24
-- Restructured README.md and CLAUDE.md
-
-### 2025-01-22
-- Implemented init aggregator pattern architecture
-
----
-
-*Update this file when making important architectural decisions.*
+### InputHandler
+Unified input system with action mapping, contexts, and rebinding. (see docs/systems/input_handler.md for more info)

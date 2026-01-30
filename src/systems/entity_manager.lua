@@ -103,15 +103,6 @@ function EntityManager:draw()
     end
 end
 
----Draws debug info for all alive entities
-function EntityManager:drawDebug()
-    for _, entity in ipairs(self.entities) do
-        if entity.alive then
-            entity:drawDebug()
-        end
-    end
-end
-
 ---Removes all dead entities from the manager
 function EntityManager:cleanup()
     local removed = 0

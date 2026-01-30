@@ -1,5 +1,4 @@
 local Logger = require("src.logger")
-local Game = require("src.init")
 
 ---@class Entity
 ---@field x number
@@ -62,29 +61,6 @@ end
 ---Draw method (empty, for override)
 function Entity:draw()
     -- Override in subclasses
-end
-
----Draws debug information (hitbox, center, velocity)
-function Entity:drawDebug()
-    local Colors = Game.constants.colors
-
-    -- Draw hitbox circle
-    love.graphics.setColor(Colors.debug.hitbox)
-    love.graphics.circle("line", self.x, self.y, self.radius)
-
-    -- Draw center point
-    love.graphics.setColor(Colors.debug.center)
-    love.graphics.circle("fill", self.x, self.y, 3)
-
-    -- Draw velocity vector
-    if self.vx ~= 0 or self.vy ~= 0 then
-        love.graphics.setColor(Colors.debug.velocity)
-        local scale = 0.5
-        love.graphics.line(self.x, self.y, self.x + self.vx * scale, self.y + self.vy * scale)
-    end
-
-    -- Reset color
-    love.graphics.setColor(1, 1, 1, 1)
 end
 
 ---Destroys the entity

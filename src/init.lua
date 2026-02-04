@@ -36,12 +36,20 @@ function Game.load()
     -- Initial context
     Game.input:setContext("menu")
 
+    -- Create audio manager instance
+    local AudioManager = Game.systems.audioManager
+    Game.audio = AudioManager.new(Game.constants.audioDefaults.settings)
+    AudioManager.setupFromDefaults(Game.audio, Game.constants.audioDefaults)
+
     Game.logger.info("[Game] Game Started!")
 end
 
 function Game.update(dt)
     -- Input update BEFORE game logic
     Game.input:update(dt)
+
+    -- Audio update
+    Game.audio:update(dt)
 
     -- Debug controls
     if Game.input:isPressed("debug_toggle") then

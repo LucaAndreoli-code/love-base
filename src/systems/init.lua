@@ -32,6 +32,10 @@ function Systems:load()
     Systems.assetManager = require("src.systems.asset_manager")
     Logger.info("[Systems] Asset manager system loaded")
 
+    -- Audio Manager System
+    Systems.audioManager = require("src.systems.audio_manager")
+    Logger.info("[Systems] Audio manager system loaded")
+
     Logger.info("[Systems] Done!")
 end
 

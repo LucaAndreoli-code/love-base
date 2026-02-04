@@ -49,7 +49,6 @@ A file should be split when it meets ANY of these criteria:
 - File < 150 lines with single responsibility
 - Splitting would create files < 30 lines
 - Components are tightly coupled and always used together
-```
 
 ## Systems Reference
 

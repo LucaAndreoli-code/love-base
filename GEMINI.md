@@ -62,5 +62,17 @@ Note: Rectangles use center coordinates (x, y = center, not top-left) (see docs/
 ### InputHandler
 Unified input system with action mapping, contexts, and rebinding. (see docs/systems/input_handler.md for more info)
 
+### AssetManager
+Handles loading, caching, and accessing game assets with placeholder support.
+Asset types: sprites, audio, fonts, shaders, atlas (spritesheets)
+
+Load methods: loadManifest(path), loadSprite(name, path), loadAudio(name, path, type), loadFont(name, path, size), loadShader(name, path), loadAtlas(name, path, frameW, frameH)
+
+Get methods: getSprite(name), getAudio(name), getFont(name), getShader(name), getAtlas(name), getQuad(atlasName, frameIndex)
+
+Utilities: isLoaded(type, name), unload(type, name), clear(), getStats()
+
+Note: Missing assets return placeholders (magenta sprite, silent audio, default font) with WARNING log. (see docs/systems/asset_manager.md for more info)
+
 ### Tests
 Tests are made with busted and are located in the `spec/` folder. All generic systems should have tests.

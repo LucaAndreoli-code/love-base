@@ -28,6 +28,10 @@ function Systems:load()
     Systems.InputPrompts = require("src.systems.input_handler.input_prompts")
     Logger.info("[Systems] Input prompts system loaded")
 
+    -- Asset Manager System
+    Systems.assetManager = require("src.systems.asset_manager")
+    Logger.info("[Systems] Asset manager system loaded")
+
     Logger.info("[Systems] Done!")
 end
 

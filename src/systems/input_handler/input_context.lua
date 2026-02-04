@@ -14,6 +14,12 @@
 ---@class InputContext
 ---@field name string
 ---@field actions table<string, InputAction>  actionName → InputAction
+---@field addAction fun(self: InputContext, action: InputAction)
+---@field removeAction fun(self: InputContext, actionName: string): boolean
+---@field hasAction fun(self: InputContext, actionName: string): boolean
+---@field getAction fun(self: InputContext, actionName: string): InputAction|nil
+---@field getActions fun(self: InputContext): table<string, InputAction>
+---@field count fun(self: InputContext): number
 
 local InputContext = {}
 InputContext.__index = InputContext

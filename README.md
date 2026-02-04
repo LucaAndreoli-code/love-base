@@ -22,9 +22,9 @@ love . --debug   # Debug mode (hot reload + verbose logging)
 ├── libs/              # Third-party libraries (lurker, etc.)
 ├── shaders/           # GLSL shaders
 ├── src/
-│   ├── constants/     # Config values (colors, sizes, speeds)
-│   ├── scenes/        # Game states (menu, game, pause)
-│   ├── systems/       # Core systems (state machine, input, assets)
+│   ├── constants/     # Config values (colors, sizes, speeds, etc.)
+│   ├── scenes/        # Game states (menu, game, pause, etc.)
+│   ├── systems/       # Core systems (state machine, input, assets manager, etc.)
 │   ├── ui/            # Reusable UI components
 │   ├── utils/         # Helper functions
 │   ├── init.lua       # Master loader

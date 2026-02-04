@@ -28,7 +28,7 @@ busted           # Run all tests
 - **UI Components**: factory pattern with `Component.new()` + metatable
 - **Comments**: (if needed) write comments in english
 - **Logger**: Use
-- **Type Annotations**: use LuaLS annotations for all systems:
+- **Type Annotations**: use LuaLS annotations for all systems (Always check if some are missing):
 ```lua
 ---@class Entity
 ---@field alive boolean
@@ -49,7 +49,6 @@ A file should be split when it meets ANY of these criteria:
 - File < 150 lines with single responsibility
 - Splitting would create files < 30 lines
 - Components are tightly coupled and always used together
-```
 
 ## Systems Reference
 

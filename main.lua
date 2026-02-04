@@ -42,11 +42,8 @@ end
 
 function love.keypressed(key, scancode, isrepeat)
     -- Guard against reload race conditions
-    if Game.input then
-        Game.input:keypressed(key, scancode, isrepeat)
-    end
     if Game.keypressed then
-        Game.keypressed(key)
+        Game.keypressed(key, scancode, isrepeat)
     end
 end
 

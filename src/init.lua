@@ -59,8 +59,9 @@ function Game.draw()
     Game.debug:draw()
 end
 
-function Game.keypressed(key)
+function Game.keypressed(key, scancode, isrepeat)
     -- Handle other keypresses here
+    Game.input:keypressed(key, scancode, isrepeat)
     Game.debug:keypressed(key)
 end
 

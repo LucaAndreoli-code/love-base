@@ -91,7 +91,10 @@ function Debug:draw()
     love.graphics.print("FPS: " .. tostring(love.timer.getFPS()), 10, 30)
     love.graphics.print("Device: " .. self.prompts:getDevice(), 10, 50)
 
-    -- Bottom-left: input history with icons
+    Debug:drawInput()
+end
+
+function Debug:drawInput()
     local screenH = love.graphics.getHeight()
     local iconSize = 48
     local padding = 10
@@ -122,7 +125,7 @@ function Debug:draw()
         end
     end
 
-    love.graphics.setColor(1, 1, 1) -- Reset color
+    love.graphics.setColor(1, 1, 1)
 end
 
 function Debug:keypressed(key)

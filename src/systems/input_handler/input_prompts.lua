@@ -15,7 +15,7 @@
 local InputPrompts = {}
 InputPrompts.__index = InputPrompts
 
-local spriteMap = require("src.constants.input_sprites_map")
+local spriteMap = require("src.constants.input.input_sprites_map")
 
 --- Creates a new InputPrompts instance
 ---@param inputHandler InputHandler

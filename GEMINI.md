@@ -61,3 +61,6 @@ Note: Rectangles use center coordinates (x, y = center, not top-left) (see docs/
 
 ### InputHandler
 Unified input system with action mapping, contexts, and rebinding. (see docs/systems/input_handler.md for more info)
+
+### Tests
+Tests are made with busted and are located in the `spec/` folder. All generic systems should have tests.

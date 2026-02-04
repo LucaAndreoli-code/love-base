@@ -64,3 +64,4 @@ Unified input system with action mapping, contexts, and rebinding. (see docs/sys
 
 ### Tests
 Tests are made with busted and are located in the `spec/` folder. All generic systems should have tests.
+To run test before running busted we should run eval(luarocks path) to load the dependencies.

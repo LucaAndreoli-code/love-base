@@ -76,3 +76,4 @@ Note: Missing assets return placeholders (magenta sprite, silent audio, default 
 
 ### Tests
 Tests are made with busted and are located in the `spec/` folder. All generic systems should have tests.
+To run test before running busted we should run eval(luarocks path) to load the dependencies.

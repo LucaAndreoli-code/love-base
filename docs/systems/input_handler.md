@@ -373,6 +373,33 @@ Connetti il gamepad prima di avviare il gioco, oppure gestisci `love.joystickadd
 
 Durante il rebind, tutti gli input normali sono ignorati. Solo il tipo specificato viene catturato.
 
+### "Input fantasma dopo cambio contesto" (Context Switching Loop)
+
+Se premi un tasto per cambiare contesto (es. ESC per pausa), lo stesso input potrebbe essere rilevato nel nuovo contesto nello stesso frame.
+
+**Soluzioni:**
+
+1. **Auto-consume**: `pushContext` e `popContext` chiamano automaticamente `consume()` sugli stati, resettando `pressed` e `released` ma mantenendo `isDown` per prevenire re-trigger.
+
+2. **Skip First Frame**: Nel nuovo stato o scena, ignora gli input nel primo frame:
+
+```lua
+local skipNextFrame = false
+
+function MyScene.enter()
+    skipNextFrame = true -- Ignora input residui
+end
+
+function MyScene.update(dt)
+    if skipNextFrame then
+        skipNextFrame = false
+        return
+    end
+    
+    if Game.input:isPressed("..." ) then ... end
+end
+```
+
 ## Estensioni Future
 
 ### Multiplayer

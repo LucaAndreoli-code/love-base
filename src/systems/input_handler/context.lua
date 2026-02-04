@@ -68,6 +68,12 @@ return function(InputHandler)
             return
         end
 
+        -- Consume pressed/released states to prevent same-frame triggers
+        -- (preserves _wasDown so key-still-down won't re-trigger pressed)
+        for _, state in pairs(self.states) do
+            state:consume()
+        end
+
         self.activeContexts[name] = true
         self:_createStatesForContext(name)
         Logger.debug("Context pushed: " .. name, "InputHandler")
@@ -77,6 +83,11 @@ return function(InputHandler)
     --- Typical use: close pause, return to gameplay
     ---@param name string
     function InputHandler:popContext(name)
+        -- Consume pressed/released states to prevent same-frame triggers
+        for _, state in pairs(self.states) do
+            state:consume()
+        end
+
         self.activeContexts[name] = nil
         Logger.debug("Context popped: " .. name, "InputHandler")
     end

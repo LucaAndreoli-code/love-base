@@ -70,4 +70,12 @@ function InputState:clear()
     self._wasDown = false
 end
 
+--- Consume pressed/released without causing re-trigger
+--- Use when switching contexts while key is still physically pressed
+function InputState:consume()
+    self.pressed = false
+    self.released = false
+    -- Keep _wasDown as-is to prevent re-triggering pressed on next update
+end
+
 return InputState

@@ -33,13 +33,17 @@ function Game.load()
         Game.input:pushContext("debug")
     end
 
-    -- Initial context
-    Game.input:setContext("menu")
-
     -- Create audio manager instance
     local AudioManager = Game.systems.audioManager
     Game.audio = AudioManager.new(Game.constants.audioDefaults.settings)
     AudioManager.setupFromDefaults(Game.audio, Game.constants.audioDefaults)
+
+    -- Create asset manager instance
+    Game.assets = Game.systems.assetManager
+
+    -- Create state machine
+    local StateMachine = Game.systems.stateMachine
+    Game.stateMachine = StateMachine.new()
 
     Game.logger.info("Game Started!", "Game")
 end
@@ -50,6 +54,9 @@ function Game.update(dt)
 
     -- Audio update
     Game.audio:update(dt)
+
+    -- StateMachine update (current scene)
+    Game.stateMachine:update(dt)
 
     -- Debug controls
     if Game.input:isPressed("debug_toggle") then
@@ -63,6 +70,9 @@ function Game.lateUpdate()
 end
 
 function Game.draw()
+    -- Draw all states in stack (for layered rendering like pause over gameplay)
+    Game.stateMachine:draw()
+
     -- Debug overlay on top
     Game.debug:draw()
 end

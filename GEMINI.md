@@ -35,6 +35,22 @@ busted           # Run all tests
 ---@field tags table<string, boolean>
 ```
 
+## File Organization Rule
+
+**When to split a file into multiple files/folders:**
+
+A file should be split when it meets ANY of these criteria:
+1. **Lines > 200** AND has 3+ distinct responsibilities
+2. **Multiple "sections"** clearly delimited by comments (e.g., `-- LOAD FUNCTIONS --`, `-- GET FUNCTIONS --`)
+3. **Can be tested independently** - if parts can have separate unit tests, they should be separate files
+4. **Reusable components** - if a part could be used elsewhere, extract it
+
+**When NOT to split:**
+- File < 150 lines with single responsibility
+- Splitting would create files < 30 lines
+- Components are tightly coupled and always used together
+```
+
 ## Systems Reference
 
 All `.lua` files (other than logger, debug, lurker.lua and generic init aggregator pattern files) should be documented under the folder `docs/`

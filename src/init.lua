@@ -41,7 +41,7 @@ function Game.load()
     Game.audio = AudioManager.new(Game.constants.audioDefaults.settings)
     AudioManager.setupFromDefaults(Game.audio, Game.constants.audioDefaults)
 
-    Game.logger.info("[Game] Game Started!")
+    Game.logger.info("Game Started!", "Game")
 end
 
 function Game.update(dt)

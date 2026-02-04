@@ -4,15 +4,15 @@ local Constants = {}
 
 function Constants:load()
     Constants.inputDefaults = require("src.constants.input.input_defaults")
-    Logger.info("[Constants] Input defaults loaded")
+    Logger.info("Input defaults loaded", "Constants")
 
     Constants.inputSpritesMap = require("src.constants.input.input_sprites_map")
-    Logger.info("[Constants] Input sprites map loaded")
+    Logger.info("Input sprites map loaded", "Constants")
 
     Constants.audioDefaults = require("src.constants.audio_defaults")
-    Logger.info("[Constants] Audio defaults loaded")
+    Logger.info("Audio defaults loaded", "Constants")
 
-    Logger.info("[Constants] Done!")
+    Logger.info("Done!", "Constants")
 end
 
 return Constants

@@ -5,6 +5,8 @@
     Mixin that adds context methods to InputHandler.
 ]]
 
+local Logger = require("src.logger")
+
 --- Adds context management methods to InputHandler
 ---@param InputHandler table  The InputHandler class to extend
 return function(InputHandler)
@@ -39,6 +41,7 @@ return function(InputHandler)
     function InputHandler:setContext(name)
         -- Verify context exists
         if not self.contexts[name] then
+            Logger.warning("Context not found: " .. name, "InputHandler")
             return
         end
 
@@ -53,6 +56,7 @@ return function(InputHandler)
 
         -- Create states for actions of the new context
         self:_createStatesForContext(name)
+        Logger.debug("Context set: " .. name, "InputHandler")
     end
 
     --- Adds a context to the active set (stack-like)
@@ -60,11 +64,13 @@ return function(InputHandler)
     ---@param name string
     function InputHandler:pushContext(name)
         if not self.contexts[name] then
+            Logger.warning("Cannot push unknown context: " .. name, "InputHandler")
             return
         end
 
         self.activeContexts[name] = true
         self:_createStatesForContext(name)
+        Logger.debug("Context pushed: " .. name, "InputHandler")
     end
 
     --- Removes a context from the active set
@@ -72,7 +78,7 @@ return function(InputHandler)
     ---@param name string
     function InputHandler:popContext(name)
         self.activeContexts[name] = nil
-        -- Don't clear states: they might be needed by other active contexts
+        Logger.debug("Context popped: " .. name, "InputHandler")
     end
 
     --- Checks if a context is active
@@ -100,5 +106,6 @@ return function(InputHandler)
         for _, state in pairs(self.states) do
             state:clear()
         end
+        Logger.debug("All contexts cleared", "InputHandler")
     end
 end

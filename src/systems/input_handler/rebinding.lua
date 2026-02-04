@@ -5,6 +5,8 @@
     Mixin that adds rebinding methods to InputHandler.
 ]]
 
+local Logger = require("src.logger")
+
 --- Adds rebinding methods to InputHandler
 ---@param InputHandler table  The InputHandler class to extend
 return function(InputHandler)
@@ -16,13 +18,17 @@ return function(InputHandler)
     ---@return boolean  true if found and modified
     function InputHandler:setBinding(actionName, inputType, value, contextName)
         local action = self:_findAction(actionName, contextName)
-        if not action then return false end
+        if not action then
+            Logger.warning("Cannot set binding: action not found: " .. actionName, "InputHandler")
+            return false
+        end
 
         -- Validate inputType
         local validTypes = { keyboard = true, mouse = true, gamepadButton = true, gamepadAxis = true }
         if not validTypes[inputType] then return false end
 
         action[inputType] = value
+        Logger.debug(string.format("Binding set: %s.%s = %s", actionName, inputType, tostring(value)), "InputHandler")
         return true
     end
 
@@ -60,9 +66,12 @@ return function(InputHandler)
     function InputHandler:startRebind(actionName, inputType, callback)
         local action = self:_findAction(actionName)
         if not action then
+            Logger.warning("Cannot rebind: action not found: " .. actionName, "InputHandler")
             if callback then callback(false, nil) end
             return
         end
+
+        Logger.info("Rebind started for: " .. actionName, "InputHandler")
 
         self._rebind = {
             active = true,
@@ -71,14 +80,13 @@ return function(InputHandler)
             callback = callback,
             originalAction = action:clone(), -- backup
         }
-
-        -- In rebind mode, normal inputs are ignored
-        -- LÖVE callbacks must check isRebinding()
     end
 
     --- Cancels ongoing rebind
     function InputHandler:cancelRebind()
         if not self._rebind.active then return end
+
+        Logger.debug("Rebind cancelled", "InputHandler")
 
         -- Restore backup if needed
         if self._rebind.callback then

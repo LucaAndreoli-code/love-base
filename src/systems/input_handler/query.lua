@@ -62,9 +62,9 @@ return function(InputHandler)
                         -- Debug log for transitions
                         local inputType = self:_getActiveInputType(action)
                         if self.states[actionName].pressed then
-                            Logger.debug("[Input] Action " .. actionName .. " pressed " .. inputType)
+                            Logger.debug("Action " .. actionName .. " pressed " .. inputType, "Input")
                         elseif self.states[actionName].released then
-                            Logger.debug("[Input] Action " .. actionName .. " released " .. inputType)
+                            Logger.debug("Action " .. actionName .. " released " .. inputType, "Input")
                         end
                     end
                 end
